@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DOH Pass — UAE Specialist Exam Intelligence</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #C8A96E;
+    --gold-light: #E8D5A3;
+    --gold-dark: #9A7A45;
+    --navy: #0A0F1E;
+    --navy-mid: #111827;
+    --navy-light: #1A2744;
+    --slate: #2D3E6B;
+    --cream: #F5F0E8;
+    --white: #FAFAF8;
+    --red: #E85D5D;
+    --green: #4CAF7D;
+    --text-muted: #8896B3;
+    --border: rgba(200,169,110,0.2);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'DM Sans',sans-serif; background:var(--navy); color:var(--white); min-height:100vh; overflow-x:hidden; }
+
+  /* NAV */
+  nav {
+    position:fixed; top:0; width:100%; z-index:100;
+    padding:18px 40px; display:flex; align-items:center; justify-content:space-between;
+    background:rgba(10,15,30,0.9); backdrop-filter:blur(20px);
+    border-bottom:1px solid var(--border);
+  }
+  .logo { font-family:'Playfair Display',serif; font-size:1.5rem; font-weight:900; color:var(--gold); }
+  .logo span { color:var(--white); font-weight:400; }
+  .nav-cta {
+    background:var(--gold); color:var(--navy); border:none; padding:10px 24px;
+    border-radius:6px; font-weight:600; font-size:0.875rem; cursor:pointer;
+    font-family:'DM Sans',sans-serif;
+  }
+
+  /* HERO */
+  .hero {
+    min-height:100vh; display:flex; align-items:center; justify-content:center;
+    text-align:center; padding:120px 20px 80px;
+    background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(200,169,110,0.12) 0%, transparent 70%);
+    position:relative;
+  }
+  .hero-badge {
+    display:inline-block; background:rgba(200,169,110,0.15); border:1px solid var(--border);
+    color:var(--gold); padding:6px 16px; border-radius:20px; font-size:0.8rem;
+    font-weight:600; letter-spacing:0.08em; text-transform:uppercase; margin-bottom:28px;
+  }
+  .hero h1 {
+    font-family:'Playfair Display',serif; font-size:clamp(2.5rem,6vw,4.5rem);
+    font-weight:900; line-height:1.1; margin-bottom:24px; max-width:800px;
+  }
+  .hero h1 em { color:var(--gold); font-style:normal; }
+  .hero p { color:var(--text-muted); font-size:1.15rem; max-width:520px; margin:0 auto 40px; line-height:1.7; }
+  .hero-btns { display:flex; gap:16px; justify-content:center; flex-wrap:wrap; }
+  .btn-primary {
+    background:var(--gold); color:var(--navy); border:none; padding:14px 32px;
+    border-radius:8px; font-weight:700; font-size:1rem; cursor:pointer;
+    font-family:'DM Sans',sans-serif; transition:all 0.2s;
+  }
+  .btn-primary:hover { background:var(--gold-light); transform:translateY(-1px); }
+  .btn-secondary {
+    background:transparent; color:var(--white); border:1px solid var(--border);
+    padding:14px 32px; border-radius:8px; font-weight:500; font-size:1rem;
+    cursor:pointer; font-family:'DM Sans',sans-serif; transition:all 0.2s;
+  }
+  .btn-secondary:hover { border-color:var(--gold); color:var(--gold); }
+
+  /* STATS */
+  .stats {
+    display:flex; justify-content:center; gap:60px; flex-wrap:wrap;
+    padding:60px 20px; border-top:1px solid var(--border); border-bottom:1px solid var(--border);
+    background:var(--navy-mid);
+  }
+  .stat { text-align:center; }
+  .stat-num { font-family:'Playfair Display',serif; font-size:2.5rem; font-weight:900; color:var(--gold); }
+  .stat-label { color:var(--text-muted); font-size:0.85rem; margin-top:4px; text-transform:uppercase; letter-spacing:0.06em; }
+
+  /* SECTION */
+  .section { padding:80px 20px; max-width:1100px; margin:0 auto; }
+  .section-label {
+    color:var(--gold); font-size:0.8rem; font-weight:600; letter-spacing:0.1em;
+    text-transform:uppercase; margin-bottom:12px;
+  }
+  .section-title { font-family:'Playfair Display',serif; font-size:clamp(1.8rem,4vw,2.8rem); font-weight:700; margin-bottom:16px; }
+  .section-sub { color:var(--text-muted); font-size:1rem; max-width:520px; line-height:1.7; margin-bottom:48px; }
+
+  /* TOPIC FILTERS */
+  .topics { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:32px; }
+  .topic-btn {
+    background:var(--navy-light); border:1px solid var(--border); color:var(--text-muted);
+    padding:8px 18px; border-radius:20px; font-size:0.875rem; cursor:pointer;
+    font-family:'DM Sans',sans-serif; transition:all 0.2s;
+  }
+  .topic-btn.active, .topic-btn:hover {
+    background:rgba(200,169,110,0.15); border-color:var(--gold); color:var(--gold);
+  }
+
+  /* QUIZ CARD */
+  #quizBody { max-width:760px; margin:0 auto; }
+  .progress-bar-wrap { background:var(--navy-light); border-radius:4px; height:4px; margin-bottom:32px; }
+  .progress-bar-fill { height:4px; background:var(--gold); border-radius:4px; transition:width 0.4s; }
+  .score-row { display:flex; justify-content:space-between; margin-bottom:24px; font-size:0.875rem; color:var(--text-muted); }
+  .score-val { font-weight:700; }
+  .score-correct { color:var(--green); }
+  .score-wrong { color:var(--red); }
+
+  .question-card {
+    background:var(--navy-mid); border:1px solid var(--border); border-radius:16px;
+    padding:36px; margin-bottom:24px;
+  }
+  .q-meta { font-size:0.78rem; color:var(--gold); font-weight:600; letter-spacing:0.06em; text-transform:uppercase; margin-bottom:16px; }
+  .q-text { font-size:1.1rem; line-height:1.65; font-weight:500; margin-bottom:28px; }
+  .options { display:flex; flex-direction:column; gap:12px; }
+  .option {
+    background:var(--navy-light); border:1px solid var(--border); border-radius:10px;
+    padding:14px 20px; cursor:pointer; display:flex; align-items:center; gap:14px;
+    transition:all 0.2s; font-size:0.95rem; text-align:left;
+  }
+  .option:hover:not(.disabled) { border-color:var(--gold); background:rgba(200,169,110,0.08); }
+  .option.selected { border-color:var(--gold); background:rgba(200,169,110,0.12); }
+  .option.correct { border-color:var(--green); background:rgba(76,175,125,0.12); color:var(--green); }
+  .option.wrong { border-color:var(--red); background:rgba(232,93,93,0.1); color:var(--red); }
+  .option.disabled { cursor:default; }
+  .opt-letter {
+    min-width:28px; height:28px; border-radius:50%; background:var(--slate);
+    display:flex; align-items:center; justify-content:center;
+    font-size:0.78rem; font-weight:700; color:var(--text-muted);
+  }
+  .option.correct .opt-letter { background:var(--green); color:white; }
+  .option.wrong .opt-letter { background:var(--red); color:white; }
+  .option.selected:not(.correct):not(.wrong) .opt-letter { background:var(--gold); color:var(--navy); }
+
+  .explanation {
+    display:none; margin-top:20px; background:rgba(200,169,110,0.08);
+    border:1px solid rgba(200,169,110,0.25); border-radius:10px;
+    padding:20px 24px; font-size:0.9rem; line-height:1.7; color:var(--cream);
+  }
+  .explanation.show { display:block; }
+  .exp-label { font-weight:700; color:var(--gold); margin-bottom:8px; font-size:0.8rem; text-transform:uppercase; letter-spacing:0.06em; }
+
+  .quiz-actions { display:flex; justify-content:space-between; align-items:center; margin-top:8px; }
+  .btn-submit {
+    background:var(--gold); color:var(--navy); border:none; padding:12px 28px;
+    border-radius:8px; font-weight:700; font-size:0.95rem; cursor:pointer;
+    font-family:'DM Sans',sans-serif; transition:all 0.2s;
+  }
+  .btn-submit:disabled { opacity:0.4; cursor:default; }
+  .btn-next {
+    background:var(--navy-light); color:var(--white); border:1px solid var(--border);
+    padding:12px 28px; border-radius:8px; font-weight:600; font-size:0.95rem;
+    cursor:pointer; font-family:'DM Sans',sans-serif; transition:all 0.2s; display:none;
+  }
+  .btn-next:hover { border-color:var(--gold); color:var(--gold); }
+
+  /* RESULTS */
+  #resultsScreen {
+    display:none; text-align:center; background:var(--navy-mid);
+    border:1px solid var(--border); border-radius:16px; padding:60px 40px;
+    max-width:600px; margin:0 auto;
+  }
+  #resultsScreen.show { display:block; }
+  .result-icon { font-size:3rem; margin-bottom:20px; }
+  .result-title { font-family:'Playfair Display',serif; font-size:2rem; font-weight:700; margin-bottom:12px; }
+  .result-msg { color:var(--text-muted); margin-bottom:32px; line-height:1.6; }
+  .result-scores { display:flex; gap:32px; justify-content:center; margin-bottom:32px; }
+  .rscore { text-align:center; }
+  .rscore-num { font-family:'Playfair Display',serif; font-size:2.2rem; font-weight:900; }
+  .rscore-label { font-size:0.8rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.06em; margin-top:4px; }
+
+  /* FOOTER */
+  footer {
+    text-align:center; padding:40px 20px; border-top:1px solid var(--border);
+    color:var(--text-muted); font-size:0.85rem;
+  }
+  footer strong { color:var(--gold); }
+
+  @media(max-width:600px) {
+    nav { padding:16px 20px; }
+    .stats { gap:32px; }
+    .question-card { padding:24px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">DOH<span>Pass</span></div>
+  <button class="nav-cta" onclick="document.getElementById('quiz-section').scrollIntoView({behavior:'smooth'})">Start Practicing</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div>
+    <div class="hero-badge">UAE DOH Specialist Exam</div>
+    <h1>Pass the DOH exam<br>with <em>real recall questions</em></h1>
+    <p>The only question bank built from actual UAE DOH specialist exam recalls — Internal Medicine, explained by clinicians, for clinicians.</p>
+    <div class="hero-btns">
+      <button class="btn-primary" onclick="document.getElementById('quiz-section').scrollIntoView({behavior:'smooth'})">Start Free Practice</button>
+      <button class="btn-secondary">View Topics</button>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stat"><div class="stat-num">70+</div><div class="stat-label">Recall Questions</div></div>
+  <div class="stat"><div class="stat-num">10</div><div class="stat-label">Specialties</div></div>
+  <div class="stat"><div class="stat-num">100%</div><div class="stat-label">UAE DOH Focused</div></div>
+  <div class="stat"><div class="stat-num">Free</div><div class="stat-label">No Signup Needed</div></div>
+</div>
+
+<!-- QUIZ SECTION -->
+<section class="section" id="quiz-section">
+  <div class="section-label">Question Bank</div>
+  <div class="section-title">Practice by Topic</div>
+  <div class="section-sub">Select a specialty or practice all questions. Each answer includes a detailed clinical explanation.</div>
+
+  <div class="topics" id="topicFilters"></div>
+
+  <div id="quizBody">
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progressBar" style="width:0%"></div></div>
+    <div class="score-row">
+      <span>Question <span id="qNum">1</span> of <span id="qTotal">1</span></span>
+      <span>✓ <span id="correctCount" class="score-val score-correct">0</span> &nbsp; ✗ <span id="wrongCount" class="score-val score-wrong">0</span></span>
+    </div>
+    <div class="question-card" id="questionCard">
+      <div class="q-meta" id="qTopic"></div>
+      <div class="q-text" id="qText"></div>
+      <div class="options" id="optionsContainer"></div>
+      <div class="explanation" id="explanation">
+        <div class="exp-label">Clinical Explanation</div>
+        <div id="expText"></div>
+      </div>
+    </div>
+    <div class="quiz-actions">
+      <span style="font-size:0.85rem;color:var(--text-muted)" id="feedbackMsg"></span>
+      <div style="display:flex;gap:12px">
+        <button class="btn-submit" id="submitBtn" onclick="submitAnswer()" disabled>Submit Answer</button>
+        <button class="btn-next" id="nextBtn" onclick="nextQuestion()">Next →</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="resultsScreen">
+    <div class="result-icon" id="resultIcon">🎯</div>
+    <div class="result-title" id="resultsTitle"></div>
+    <div class="result-msg" id="resultsMsg"></div>
+    <div class="result-scores">
+      <div class="rscore"><div class="rscore-num score-correct" id="rCorrect">0</div><div class="rscore-label">Correct</div></div>
+      <div class="rscore"><div class="rscore-num score-wrong" id="rWrong">0</div><div class="rscore-label">Wrong</div></div>
+      <div class="rscore"><div class="rscore-num" id="rPct" style="color:var(--gold)">0%</div><div class="rscore-label">Score</div></div>
+    </div>
+    <button class="btn-primary" onclick="restartQuiz()">Practice Again</button>
+  </div>
+</section>
+
+<footer>
+  <strong>DOH Pass</strong> — Built for UAE physicians. Real recalls, real explanations.<br>
+  <span style="margin-top:8px;display:block">Internal Medicine Specialist Exam Question Bank</span>
+</footer>
+
+<script>
+const ALL_QUESTIONS = [
+  // CARDIOLOGY
+  { topic:"Cardiology", q:"Patient presents with sudden chest pain, ST elevation in V1-V4. Most appropriate immediate management?", options:["Aspirin 300mg + PCI", "Thrombolysis only", "CABG urgently", "Observation and troponin"], answer:"A", explanation:"STEMI with anterior ST elevation requires dual antiplatelet (Aspirin 300mg + Clopidogrel/Ticagrelor) and urgent primary PCI within 90 minutes of first medical contact. Thrombolysis is only used if PCI unavailable within 120 minutes." },
+  { topic:"Cardiology", q:"Beck's Triad (hypotension, muffled heart sounds, raised JVP) — diagnosis?", options:["Tension pneumothorax","Cardiac tamponade","Acute MI","Aortic dissection"], answer:"B", explanation:"Beck's Triad = cardiac tamponade. Pericardial fluid compresses the heart → reduced filling → reduced output. ECG shows electrical alternans. Management: pericardiocentesis urgently." },
+  { topic:"Cardiology", q:"AF with RVR, haemodynamically stable, EF preserved — first-line rate control?", options:["DC cardioversion","IV Amiodarone","IV Metoprolol or Diltiazem","Digoxin"], answer:"C", explanation:"Stable AF with preserved EF: IV beta-blocker (metoprolol) or non-DHP CCB (diltiazem) for rate control. DC cardioversion reserved for haemodynamic instability. Digoxin is second-line (slow onset)." },
+  { topic:"Cardiology", q:"Young patient, exertional syncope, systolic murmur that increases with Valsalva — diagnosis?", options:["Aortic stenosis","Mitral regurgitation","HOCM","VSD"], answer:"C", explanation:"HOCM: murmur increases with Valsalva (reduced preload → worsens obstruction). Exertional syncope in young = HOCM until proven otherwise. Echocardiogram confirms. Risk of sudden cardiac death." },
+  { topic:"Cardiology", q:"Severe aortic stenosis — gradient 50mmHg, valve area <1cm² — treatment?", options:["Aortic valve replacement","Medical management","Balloon valvuloplasty","Diuretics only"], answer:"A", explanation:"Severe AS (AVA <1cm², mean gradient >40mmHg) with symptoms = class I indication for AVR. Surgical AVR for low-risk patients; TAVI for high surgical risk. Medical therapy does not change prognosis." },
+  { topic:"Cardiology", q:"Patient on warfarin for mechanical mitral valve — INR 1.8. Action?", options:["Increase warfarin dose","Switch to DOAC","Add heparin bridge","Stop warfarin"], answer:"A", explanation:"Mechanical mitral valve requires INR 2.5-3.5. INR 1.8 is subtherapeutic — increase warfarin dose. DOACs are CONTRAINDICATED with mechanical heart valves (RE-ALIGN trial showed worse outcomes)." },
+  { topic:"Cardiology", q:"Pulsus paradoxus >10mmHg is classic for?", options:["Aortic stenosis","Cardiac tamponade","Constrictive pericarditis","HOCM"], answer:"B", explanation:"Pulsus paradoxus (>10mmHg drop in SBP during inspiration) is classic for cardiac tamponade. Also seen in severe asthma, COPD exacerbation. In tamponade, inspiration increases RV filling at expense of LV." },
+
+  // PULMONOLOGY
+  { topic:"Pulmonology", q:"PaO2/FiO2 ratio 150mmHg on PEEP 8 — ARDS severity?", options:["Mild","Moderate","Severe","Not ARDS"], answer:"B", explanation:"Berlin criteria: Mild ARDS = PF ratio 200-300, Moderate = 100-200, Severe = <100, all on PEEP ≥5. PF ratio 150 = Moderate ARDS. Management: lung-protective ventilation (TV 6ml/kg IBW), prone positioning for severe." },
+  { topic:"Pulmonology", q:"HRCT: basal subpleural honeycombing with traction bronchiectasis — diagnosis?", options:["Sarcoidosis","UIP/IPF","NSIP","Hypersensitivity pneumonitis"], answer:"B", explanation:"UIP (Usual Interstitial Pneumonia) pattern = basal, subpleural, honeycombing ± traction bronchiectasis. This is the CT pattern of IPF. No identifiable cause needed if classic UIP. Treatment: Nintedanib or Pirfenidone." },
+  { topic:"Pulmonology", q:"Young patient, haemoptysis, renal failure, positive anti-GBM antibodies — diagnosis?", options:["Wegener's granulomatosis","Goodpasture syndrome","SLE","Churg-Strauss"], answer:"B", explanation:"Goodpasture syndrome: pulmonary-renal syndrome with anti-GBM antibodies targeting type IV collagen in alveoli and glomeruli. Treatment: plasmapheresis + immunosuppression (cyclophosphamide + steroids)." },
+  { topic:"Pulmonology", q:"Pleural fluid: protein >3g/dL, LDH >2/3 upper limit, pleural:serum LDH >0.6 — type?", options:["Transudate","Exudate","Chylothorax","Haemothorax"], answer:"B", explanation:"Light's criteria for exudate: pleural protein/serum protein >0.5, OR pleural LDH/serum LDH >0.6, OR pleural LDH >2/3 upper normal serum LDH. Meeting ANY ONE = exudate. Causes: pneumonia, malignancy, TB, PE." },
+  { topic:"Pulmonology", q:"Patient with COPD — FEV1/FVC 0.65, FEV1 45% predicted — GOLD stage?", options:["GOLD 1","GOLD 2","GOLD 3","GOLD 4"], answer:"C", explanation:"GOLD staging by FEV1% predicted (post-bronchodilator): GOLD 1 ≥80%, GOLD 2 50-79%, GOLD 3 30-49%, GOLD 4 <30%. FEV1 45% = GOLD 3 (severe). Note: diagnosis requires FEV1/FVC <0.7." },
+
+  // NEPHROLOGY
+  { topic:"Nephrology", q:"Hypokalaemia + metabolic alkalosis + hypomagnesaemia + hypocalciuria — diagnosis?", options:["Bartter syndrome","Gitelman syndrome","Conn's syndrome","Liddle syndrome"], answer:"B", explanation:"Gitelman syndrome: loss-of-function mutation in thiazide-sensitive NaCl cotransporter (DCT). Features: hypokalaemia, metabolic alkalosis, hypomagnesaemia, HYPOcalciuria. Bartter's causes HYPERcalciuria. Treat with magnesium and K supplements." },
+  { topic:"Nephrology", q:"Pneumonia + confusion + Na 118 — urine Na 60, urine osmolality 600 — diagnosis?", options:["Hypovolaemic hyponatraemia","SIADH","Hypothyroidism","Psychogenic polydipsia"], answer:"B", explanation:"SIADH criteria: hyponatraemia + low serum osmolality + inappropriately concentrated urine (UOsm>100) + elevated urine Na (>40) + euvolaemia + no adrenal/thyroid dysfunction. Cause: pneumonia, CNS disease, drugs. Treat: fluid restriction ± hypertonic saline if severe." },
+  { topic:"Nephrology", q:"CKD patient, GFR 22 — classification?", options:["G3a","G3b","G4","G5"], answer:"C", explanation:"GFR staging: G1≥90, G2=60-89, G3a=45-59, G3b=30-44, G4=15-29, G5<15. GFR 22 = G4 (severely decreased). At this stage: prepare for renal replacement therapy, avoid nephrotoxins, aggressive CV risk management." },
+  { topic:"Nephrology", q:"AKI post-contrast CT in diabetic patient — mechanism?", options:["Immune complex deposition","Renal tubular toxicity + vasoconstriction","Glomerulonephritis","Interstitial nephritis"], answer:"B", explanation:"Contrast-induced AKI: direct tubular toxicity + renal vasoconstriction reducing medullary oxygenation. Risk factors: pre-existing CKD, diabetes, dehydration, NSAIDs. Prevention: IV hydration pre/post procedure, hold metformin, minimize contrast volume." },
+  { topic:"Nephrology", q:"Nephrotic syndrome + thrombosis + positive anti-PLA2R antibodies — diagnosis?", options:["FSGS","Membranous nephropathy","Minimal change disease","IgA nephropathy"], answer:"B", explanation:"Membranous nephropathy: commonest cause of nephrotic syndrome in adults. Anti-PLA2R antibodies in 70-80% of primary cases (highly specific). Complications: DVT/PE (loss of antithrombin III). Treatment: RAAS blockade; immunosuppression for high-risk." },
+
+  // ENDOCRINOLOGY
+  { topic:"Endocrinology", q:"Patient with fatigue, weight gain, constipation, bradycardia, TSH 45, free T4 low — treatment?", options:["Carbimazole","Levothyroxine","Propylthiouracil","Radioactive iodine"], answer:"B", explanation:"Primary hypothyroidism: high TSH + low T4. Treatment: Levothyroxine starting 1.6mcg/kg/day (lower dose in elderly/cardiac patients). Recheck TSH in 6-8 weeks. Target TSH 0.5-2.5 mU/L." },
+  { topic:"Endocrinology", q:"Patient with weight loss, heat intolerance, AF, TSH <0.01, T4 elevated — most appropriate treatment?", options:["Levothyroxine","Carbimazole + beta-blocker","Thyroxine + propranolol","Steroids"], answer:"B", explanation:"Hyperthyroidism with AF: Carbimazole (antithyroid) + beta-blocker (propranolol for symptom control — also inhibits T4→T3 conversion). Rate control with beta-blocker. Anticoagulation for AF. Definitive: radioiodine or surgery after euthyroid." },
+  { topic:"Endocrinology", q:"Acromegaly — surgery failed, IGF-1 still elevated — next step?", options:["Repeat surgery","Octreotide (somatostatin analogue)","Cabergoline","Observation"], answer:"B", explanation:"Acromegaly treatment: trans-sphenoidal surgery first-line. If residual/recurrent disease: somatostatin analogues (Octreotide, Lanreotide) — suppress GH. Second-line: Pegvisomant (GH receptor antagonist). Radiotherapy for resistant cases." },
+  { topic:"Endocrinology", q:"Fasting hypoglycaemia, inappropriately elevated insulin, C-peptide elevated — diagnosis?", options:["Exogenous insulin injection","Insulinoma","Type 2 diabetes","Reactive hypoglycaemia"], answer:"B", explanation:"Insulinoma: endogenous insulin hypersecretion. C-peptide is CO-secreted with insulin, so elevated C-peptide = endogenous source (rules out exogenous insulin injection where C-peptide is suppressed). 72-hour fast confirms. Treatment: surgical resection." },
+  { topic:"Endocrinology", q:"Patient vomiting, hypotension, hyponatraemia, hyperkalaemia, hypoglycaemia — diagnosis?", options:["SIADH","Addisonian crisis","DKA","Hypothyroidism"], answer:"B", explanation:"Addisonian (adrenal) crisis: cortisol deficiency → hypotension, hyponatraemia, hyperkalaemia, hypoglycaemia. Precipitated by stress/illness/missed steroids. Emergency: IV Hydrocortisone 100mg stat, IV saline, glucose. Then investigate cause." },
+
+  // GASTROENTEROLOGY
+  { topic:"Gastroenterology", q:"Upper GI bleed — Rockford score: BP 90, HR 110, melena, no co-morbidities — risk?", options:["Low risk — discharge","Intermediate — monitor","High risk — urgent endoscopy","Immediate surgery"], answer:"C", explanation:"Haemodynamic compromise (hypotension + tachycardia) + melena = high-risk upper GI bleed. Requires resuscitation + urgent endoscopy within 24h (within 12h if actively bleeding/unstable). PPI infusion pre-endoscopy. Rockford/Glasgow-Blatchford guides risk." },
+  { topic:"Gastroenterology", q:"Coeliac disease diagnosis — best test?", options:["Anti-tTG IgA + total IgA","Colonoscopy","HLA-DQ2/DQ8","Barium swallow"], answer:"A", explanation:"Coeliac disease: Anti-tissue transglutaminase IgA (anti-tTG IgA) is the first-line serological test. Must check total IgA (IgA deficiency = false negative → use IgG-based tests). Confirm with duodenal biopsy showing villous atrophy. Must be on gluten diet during testing." },
+  { topic:"Gastroenterology", q:"Child-Pugh score components?", options:["Bilirubin, albumin, PT, ascites, encephalopathy","Bilirubin, creatinine, INR","ALT, AST, GGT, albumin","Platelets, bilirubin, INR"], answer:"A", explanation:"Child-Pugh score: Bilirubin + Albumin + PT/INR + Ascites + Hepatic encephalopathy. Score A (5-6) = well compensated; B (7-9) = significant compromise; C (10-15) = decompensated. MELD score (Bilirubin, INR, Creatinine) is used for transplant listing." },
+  { topic:"Gastroenterology", q:"IBS with predominant constipation not responding to laxatives — next step?", options:["Increase laxative dose","Linaclotide + CBT","Colonoscopy","Rifaximin"], answer:"B", explanation:"IBS-C refractory to laxatives: Linaclotide (guanylate cyclase-C agonist → increases intestinal fluid secretion + reduces visceral pain) is NICE-approved. Combine with CBT (psychological component of IBS). Rifaximin is for IBS-D." },
+
+  // NEUROLOGY
+  { topic:"Neurology", q:"Patient with sudden severe 'thunderclap' headache — worst of life — CT head normal — next step?", options:["Discharge with analgesia","MRI brain","Lumbar puncture","Start sumatriptan"], answer:"C", explanation:"Thunderclap headache + normal CT: must perform LP to exclude subarachnoid haemorrhage. CT misses up to 2-5% of SAH. LP: xanthochromia (yellow CSF) or elevated RBCs that don't clear = SAH until proven otherwise. LP >12h after onset for xanthochromia." },
+  { topic:"Neurology", q:"Cauda equina syndrome — most urgent intervention?", options:["IV steroids","MRI spine + urgent surgical decompression","Physiotherapy","Oral analgesia and review"], answer:"B", explanation:"Cauda equina syndrome (saddle anaesthesia, urinary/bowel dysfunction, bilateral leg weakness) = surgical emergency. MRI spine stat to confirm and plan urgent surgical decompression. Delay >24-48h significantly worsens prognosis for continence and motor recovery." },
+  { topic:"Neurology", q:"Young woman, relapsing-remitting neurological symptoms, MRI shows periventricular white matter lesions, CSF oligoclonal bands — diagnosis?", options:["NMO","Multiple sclerosis","CNS vasculitis","Migraine with aura"], answer:"B", explanation:"MS: dissemination in time and space (McDonald criteria) + periventricular lesions + CSF oligoclonal bands (present in 95%). NMO (Devic's): anti-AQP4 antibodies, optic neuritis + transverse myelitis. Treatment: disease-modifying therapy (interferon, natalizumab)." },
+  { topic:"Neurology", q:"Myasthenia gravis — crisis on ventilator — treatment?", options:["Increase pyridostigmine","IV immunoglobulin or plasmapheresis","High dose steroids acutely","Neostigmine IV"], answer:"B", explanation:"Myasthenic crisis: respiratory failure requiring ventilation. Acute treatment: IVIG or plasmapheresis (removes AChR antibodies). Hold or reduce cholinesterase inhibitors during crisis (may worsen secretions). Steroids initiated carefully — can cause transient worsening. Thymectomy for long-term." },
+
+  // HAEMATOLOGY
+  { topic:"Haematology", q:"Sickle cell disease — definitive curative treatment?", options:["Hydroxyurea","Bone marrow transplantation","Blood transfusion","Folic acid"], answer:"B", explanation:"Bone marrow (haematopoietic stem cell) transplantation is the only curative treatment for sickle cell disease. Hydroxyurea increases HbF (reduces sickling crises, improves survival but not curative). Transplant is offered to high-risk patients with matched donor." },
+  { topic:"Haematology", q:"Young male, anaemia Hb 10, MCV 74, normal iron studies — best diagnostic test?", options:["Bone marrow biopsy","Haemoglobin electrophoresis","Reticulocyte count","Iron infusion"], answer:"B", explanation:"Microcytic anaemia + normal iron = likely haemoglobinopathy. Hb electrophoresis differentiates: thalassaemia trait (HbA2 >3.5% in beta-thal), HbS, HbC, etc. Common in Middle Eastern populations. Iron deficiency excluded by normal ferritin/iron studies." },
+  { topic:"Haematology", q:"Patient on heparin, platelets drop from 280 to 80 over 5 days — diagnosis?", options:["DIC","HIT — heparin-induced thrombocytopaenia","ITP","TTP"], answer:"B", explanation:"HIT: platelet fall >50% (or to <100) typically 5-10 days after heparin exposure. Paradoxically PROTHROMBOTIC (not just low platelets). 4T score to risk stratify. Management: STOP all heparin immediately, start non-heparin anticoagulant (argatroban, fondaparinux, danaparoid). Do NOT give platelet transfusions." },
+  { topic:"Haematology", q:"Elderly patient, MGUS: M-protein 1.2g/dL, BM plasma cells 8%, no CRAB criteria — management?", options:["Chemotherapy","Stem cell transplant","Watch and wait","Radiotherapy"], answer:"C", explanation:"MGUS (M-protein <3g/dL, BM plasma cells <10%, no CRAB criteria [hyperCalcaemia, Renal failure, Anaemia, Bone lesions]): watch and wait. Risk of progression to myeloma ~1%/year. Repeat SPEP in 6 months, then annually." },
+
+  // RHEUMATOLOGY
+  { topic:"Rheumatology", q:"Woman with facial rash, joint pain, photosensitivity, anti-dsDNA positive, low complement — diagnosis?", options:["Dermatomyositis","SLE","Rosacea","MCTD"], answer:"B", explanation:"SLE: butterfly rash, photosensitivity, arthritis, serositis, renal/neuro involvement. Anti-dsDNA (highly specific) + low C3/C4 (complement consumption = active disease). ACR/EULAR 2019 criteria. Treatment: hydroxychloroquine for all; add steroids/mycophenolate/cyclophosphamide for organ involvement." },
+  { topic:"Rheumatology", q:"Man with sudden onset hot swollen great toe, uric acid 580 — first-line acute treatment?", options:["Allopurinol","NSAIDs or Colchicine","Probenecid","IV steroids"], answer:"B", explanation:"Acute gout: NSAIDs (indomethacin, naproxen) or Colchicine first-line. Steroids if NSAIDs/colchicine contraindicated. DO NOT start allopurinol during acute attack (can prolong/worsen). Allopurinol is for prevention — start 2-4 weeks after acute episode resolves." },
+  { topic:"Rheumatology", q:"Symmetric small joint arthritis, morning stiffness >1 hour, RF positive, anti-CCP positive — treatment?", options:["NSAIDs alone","Hydroxychloroquine","Methotrexate","Prednisolone only"], answer:"C", explanation:"RA: Methotrexate is the anchor DMARD — first-line. Start early to prevent joint destruction. Combine with folic acid (reduces side effects). Add short-term steroids for bridge therapy. If inadequate response: add another DMARD or switch to biologic (TNF inhibitor, JAK inhibitor)." },
+
+  // INFECTIOUS DISEASE
+  { topic:"Infectious Disease", q:"Neutropenic fever (ANC <500) — empirical antibiotic?", options:["Oral amoxicillin","IV Piperacillin-Tazobactam or Cefepime","IV vancomycin alone","Co-trimoxazole"], answer:"B", explanation:"Febrile neutropenia: broad-spectrum anti-pseudomonal beta-lactam: Pip-Taz or Cefepime (or Meropenem if high-risk/unstable). Add vancomycin if: MRSA risk, catheter infection, skin/soft tissue, haemodynamic instability. Do not delay antibiotics — start within 1 hour." },
+  { topic:"Infectious Disease", q:"HIV patient, CD4 50, bilateral interstitial infiltrates, O2 sat 88% on room air, LDH elevated — diagnosis?", options:["CMV pneumonitis","PCP pneumonia","TB","Bacterial pneumonia"], answer:"B", explanation:"PCP (Pneumocystis jirovecii pneumonia): CD4 <200, bilateral interstitial infiltrates, elevated LDH, subacute onset. Treatment: High-dose Co-trimoxazole (TMP-SMX) x21 days. Add steroids if PaO2 <70mmHg or A-a gradient >35 (reduces mortality). Start ART after 2-4 weeks." },
+  { topic:"Infectious Disease", q:"Returning traveller from Sub-Saharan Africa, fever, splenomegaly, thrombocytopaenia — next step?", options:["Blood cultures","Thick and thin blood film for malaria","Dengue serology","Chest X-ray"], answer:"B", explanation:"Malaria is the most important diagnosis in returning travellers from endemic regions with fever. Thick and thin blood film x3 (if first negative, repeat q8-12h). Rapid diagnostic test (RDT) can be done simultaneously. Do not wait for results — if high suspicion treat empirically in severe cases." },
+  { topic:"Infectious Disease", q:"Anaphylaxis — what is NOT the first step?", options:["IM Adrenaline 0.5mg (1:1000)","Call ICU first","IV access + fluids","Remove trigger"], answer:"B", explanation:"Anaphylaxis first-line: IM Adrenaline 0.5mg (1:1000) into lateral thigh IMMEDIATELY — this is step ONE. Then: call for help, ABCDE, remove trigger, IV access, 1L saline, antihistamine (chlorphenamine), hydrocortisone. ICU involvement comes after initial stabilisation, NOT before adrenaline." },
+
+  // ONCOLOGY
+  { topic:"Oncology", q:"Hypercalcaemia of malignancy — most common mechanism?", options:["PTH secretion by tumour","PTHrP (parathyroid-related protein) secretion","Vitamin D toxicity","Bone metastases only"], answer:"B", explanation:"Hypercalcaemia of malignancy: 80% due to PTHrP secretion (humoral hypercalcaemia — squamous cell, renal, bladder). 20% due to osteolytic bone metastases (breast, myeloma). PTH is LOW (suppressed). Treatment: IV hydration, bisphosphonates (zoledronic acid), denosumab." },
+  { topic:"Oncology", q:"Tumour lysis syndrome — which electrolyte abnormality is life-threatening?", options:["Hyponatraemia","Hyperkalaemia","Hypomagnesaemia","Hypernatraemia"], answer:"B", explanation:"TLS: Hyperuricaemia + Hyperkalaemia + Hyperphosphataemia + Hypocalcaemia. Most life-threatening: HYPERKALAEMIA (cardiac arrhythmias). Also hypocalcaemia → tetany, seizures. Prevention: aggressive IV hydration + allopurinol (or rasburicase for high-risk). Monitor ECG." },
+  { topic:"Oncology", q:"Spinal cord compression in cancer patient — immediate treatment?", options:["Radiotherapy only","High-dose dexamethasone + urgent MRI + oncology referral","Analgesia and review","Physiotherapy"], answer:"B", explanation:"Malignant spinal cord compression: ONCOLOGICAL EMERGENCY. Immediate high-dose dexamethasone (16mg/day) to reduce oedema. Urgent MRI whole spine. Then definitive treatment: surgical decompression or radiotherapy depending on performance status/prognosis. Bladder/bowel dysfunction = irreversible if delayed." },
+  { topic:"Oncology", q:"Palliative patient — pain not controlled on oral morphine 30mg/day — converting to subcutaneous infusion — dose?", options:["30mg SC/24h","20mg SC/24h","10mg SC/24h","15mg SC/24h"], answer:"B", explanation:"Oral to SC morphine conversion: divide oral dose by 1.5 (some use 2). Oral morphine 30mg ÷ 1.5 = 20mg SC morphine/24h via syringe driver. Always prescribe breakthrough doses: 1/6th of 24h dose = ~3mg SC PRN. Review after 24h." },
+
+  // PALLIATIVE CARE
+  { topic:"Palliative Care", q:"Dying patient with respiratory secretions ('death rattle') — most appropriate management?", options:["Suction aggressively","Glycopyrronium or hyoscine SC","Increase morphine","Turn patient prone"], answer:"B", explanation:"Death rattle: noisy breathing from pooled secretions in unconscious dying patient. Does not cause distress to patient (unconscious) but distresses family. Anticholinergics (Glycopyrronium 0.2mg SC/200mcg or Hyoscine butylbromide 20mg SC) dry secretions. Explain to family that patient is not distressed. Gentle repositioning helps." },
+  { topic:"Palliative Care", q:"Refractory dyspnoea in end-of-life patient — first-line pharmacological treatment?", options:["Benzodiazepines","Low-dose opioids (morphine)","Salbutamol nebuliser","Oxygen always"], answer:"B", explanation:"Low-dose opioids (morphine) are the most effective pharmacological treatment for refractory dyspnoea in palliative patients — reduces respiratory drive and perception of breathlessness. Oxygen only if hypoxic (SpO2 <88%); not beneficial if normoxic. Benzodiazepines for anxiety component." },
+
+  // GENERAL / HIGH-YIELD MISC
+  { topic:"General Medicine", q:"CURB-65 score of 3 in a community pneumonia patient — management?", options:["Oral antibiotics at home","Hospital admission + IV antibiotics","ICU admission","Observation only"], answer:"B", explanation:"CURB-65: Confusion, Urea >7, RR ≥30, BP <90/60, Age ≥65. Score 0-1 = home. Score 2 = consider admission. Score 3-5 = hospital admission + IV antibiotics. Score ≥4 or severe features (bilateral infiltrates, SpO2<94%) = consider HDU/ICU. Cover atypicals with macrolide." },
+  { topic:"General Medicine", q:"Wells score 6 (high probability PE) — next step?", options:["D-dimer","CT pulmonary angiogram directly","V/Q scan","Observation"], answer:"B", explanation:"High clinical probability PE (Wells >4): go directly to CTPA without D-dimer (D-dimer has poor specificity; negative result doesn't rule out PE in high probability). CTPA is gold standard. If CTPA unavailable, start anticoagulation empirically while arranging." },
+  { topic:"General Medicine", q:"DKA — when to stop IV insulin infusion and switch to SC?", options:["When glucose <11","When pH >7.3, bicarbonate >18, anion gap normal","When patient is eating","When ketones are cleared on urine dip"], answer:"B", explanation:"DKA resolution criteria: pH >7.3, bicarbonate >18, anion gap <12 (ketonaemia corrected). Glucose normalises faster than acidosis — continue insulin until acidosis resolved. Overlap SC insulin for 30-60 min before stopping IV infusion to prevent rebound DKA." },
+  { topic:"General Medicine", q:"Sepsis — Hour-1 bundle includes?", options:["Broad antibiotics only","Blood cultures + lactate + IV fluids + antibiotics + vasopressors if needed","ICU transfer first","Urine output monitoring only"], answer:"B", explanation:"Sepsis Hour-1 bundle: (1) Measure lactate, (2) Blood cultures x2 before antibiotics, (3) Broad-spectrum IV antibiotics, (4) 30mL/kg IV crystalloid if hypotensive or lactate ≥4, (5) Vasopressors (noradrenaline) if MAP <65 despite fluids. Surviving Sepsis Campaign 2021." },
+  { topic:"General Medicine", q:"Mitral stenosis best assessed by?", options:["CXR","Echocardiography","ECG","Cardiac MRI"], answer:"B", explanation:"Echocardiography is the gold standard for valvular heart disease assessment. For MS: valve area (normal ≥4cm²; severe <1.5cm²), mean gradient, MVA by pressure half-time, assessment for LA thrombus. Also guides timing of intervention (balloon valvuloplasty or MVR)." }
+];
+
+// State
+let currentBank = [...ALL_QUESTIONS];
+let currentIndex = 0;
+let correctCount = 0;
+let wrongCount = 0;
+let sessionAnswered = 0;
+let selectedOption = null;
+let submitted = false;
+
+// Get unique topics
+const topics = ['All', ...new Set(ALL_QUESTIONS.map(q => q.topic))];
+
+function buildTopicFilters() {
+  const container = document.getElementById('topicFilters');
+  topics.forEach(t => {
+    const btn = document.createElement('button');
+    btn.className = 'topic-btn' + (t === 'All' ? ' active' : '');
+    btn.textContent = t;
+    btn.onclick = () => filterTopic(t);
+    container.appendChild(btn);
+  });
+}
+
+function filterTopic(topic) {
+  document.querySelectorAll('.topic-btn').forEach(b => b.classList.toggle('active', b.textContent === topic));
+  currentBank = topic === 'All' ? [...ALL_QUESTIONS] : ALL_QUESTIONS.filter(q => q.topic === topic);
+  // Shuffle
+  currentBank = currentBank.sort(() => Math.random() - 0.5);
+  currentIndex = 0; correctCount = 0; wrongCount = 0; sessionAnswered = 0;
+  document.getElementById('correctCount').textContent = '0';
+  document.getElementById('wrongCount').textContent = '0';
+  document.getElementById('resultsScreen').style.display = 'none';
+  document.getElementById('quizBody').style.display = 'block';
+  loadQuestion();
+}
+
+function loadQuestion() {
+  if (currentIndex >= currentBank.length) { showResults(); return; }
+  const q = currentBank[currentIndex];
+  submitted = false; selectedOption = null;
+
+  document.getElementById('qNum').textContent = currentIndex + 1;
+  document.getElementById('qTotal').textContent = currentBank.length;
+  document.getElementById('progressBar').style.width = ((currentIndex / currentBank.length) * 100) + '%';
+  document.getElementById('qTopic').textContent = q.topic;
+  document.getElementById('qText').textContent = q.q;
+  document.getElementById('feedbackMsg').textContent = '';
+
+  const container = document.getElementById('optionsContainer');
+  container.innerHTML = '';
+  const letters = ['A','B','C','D'];
+  q.options.forEach((opt, i) => {
+    const div = document.createElement('div');
+    div.className = 'option';
+    div.innerHTML = `<div class="opt-letter">${letters[i]}</div><span>${opt}</span>`;
+    div.onclick = () => selectOption(i, div);
+    container.appendChild(div);
+  });
+
+  document.getElementById('explanation').className = 'explanation';
+  document.getElementById('expText').textContent = '';
+  document.getElementById('submitBtn').style.display = 'inline-block';
+  document.getElementById('submitBtn').disabled = true;
+  document.getElementById('nextBtn').style.display = 'none';
+}
+
+function selectOption(index, el) {
+  if (submitted) return;
+  document.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedOption = index;
+  document.getElementById('submitBtn').disabled = false;
+}
+
+function submitAnswer() {
+  if (selectedOption === null || submitted) return;
+  submitted = true;
+  const q = currentBank[currentIndex];
+  const correctIndex = ['A','B','C','D'].indexOf(q.answer);
+  const options = document.querySelectorAll('.option');
+
+  options.forEach((o, i) => {
+    o.classList.add('disabled');
+    if (i === correctIndex) o.classList.add('correct');
+    else if (i === selectedOption && i !== correctIndex) o.classList.add('wrong');
+  });
+
+  if (selectedOption === correctIndex) {
+    correctCount++;
+    document.getElementById('correctCount').textContent = correctCount;
+    document.getElementById('feedbackMsg').textContent = '✓ Correct';
+    document.getElementById('feedbackMsg').style.color = 'var(--green)';
+  } else {
+    wrongCount++;
+    document.getElementById('wrongCount').textContent = wrongCount;
+    document.getElementById('feedbackMsg').textContent = '✗ Incorrect';
+    document.getElementById('feedbackMsg').style.color = 'var(--red)';
+  }
+  sessionAnswered++;
+
+  document.getElementById('expText').textContent = q.explanation;
+  document.getElementById('explanation').className = 'explanation show';
+  document.getElementById('submitBtn').style.display = 'none';
+  document.getElementById('nextBtn').style.display = 'inline-block';
+}
+
+function nextQuestion() {
+  currentIndex++;
+  loadQuestion();
+}
+
+function showResults() {
+  document.getElementById('quizBody').style.display = 'none';
+  const rs = document.getElementById('resultsScreen');
+  rs.style.display = 'block';
+  const pct = Math.round((correctCount / sessionAnswered) * 100) || 0;
+  document.getElementById('rCorrect').textContent = correctCount;
+  document.getElementById('rWrong').textContent = wrongCount;
+  document.getElementById('rPct').textContent = pct + '%';
+
+  let icon = '🎯', title = 'Excellent Work', msg = '';
+  if (pct >= 80) { icon='🏆'; title='Outstanding Performance'; msg=`${correctCount}/${sessionAnswered} correct — You're well on track for the DOH exam. Keep this momentum.`; }
+  else if (pct >= 60) { icon='📈'; title='Good Progress'; msg=`${correctCount}/${sessionAnswered} correct — Review the explanations. You're building the right foundation.`; }
+  else { icon='📚'; title='Keep Studying'; msg=`${correctCount}/${sessionAnswered} correct — Review each explanation carefully and try again.`; }
+
+  document.getElementById('resultIcon').textContent = icon;
+  document.getElementById('resultsTitle').textContent = title;
+  document.getElementById('resultsMsg').textContent = msg;
+}
+
+function restartQuiz() {
+  currentBank = currentBank.sort(() => Math.random() - 0.5);
+  currentIndex = 0; correctCount = 0; wrongCount = 0; sessionAnswered = 0;
+  document.getElementById('correctCount').textContent = '0';
+  document.getElementById('wrongCount').textContent = '0';
+  document.getElementById('resultsScreen').style.display = 'none';
+  document.getElementById('quizBody').style.display = 'block';
+  loadQuestion();
+}
+
+// Init
+buildTopicFilters();
+currentBank = ALL_QUESTIONS.sort(() => Math.random() - 0.5);
+loadQuestion();
+</script>
+</body>
+</html>
