@@ -704,11 +704,10 @@ const QUESTIONS = [
 {id:244,track:'gp',cat:'Ophthalmology',src:'June 2025',q:"Stye (hordeolum) \u2014 diagnosis and treatment?",opts:["Viral infection \u2014 antivirals", "Staphylococcal eyelid gland infection \u2014 warm compresses + topical antibiotics", "Allergic reaction \u2014 antihistamines", "Chalazion \u2014 steroid injection"],ans:1,exp:"Stye (hordeolum): Staphylococcal infection of eyelid gland (external = gland of Zeis/Moll, internal = meibomian). Warm compresses + topical antibiotics."},
 {id:245,track:'gp',cat:'Ophthalmology',src:'Spec.docx',q:"Mucopurulent eye discharge + cobblestone appearance of eyelid. Diagnosis?",opts:["Gonorrhoea", "Chlamydial conjunctivitis (trachoma)", "Staphylococcal conjunctivitis", "Viral conjunctivitis"],ans:1,exp:"Chlamydial trachoma: cobblestone follicles on tarsal conjunctiva + mucopurulent discharge. Treat with azithromycin or tetracycline."},
 ];
-// Total: 245 questions
 
 // ── STATE ──
 let currentTrack = 'specialist';
-let currentMode = 'quiz';
+let currentMode  = 'quiz';
 let quizQueue = [], quizIndex = 0, score = 0, answered = {};
 
 // ── INIT ──
@@ -721,97 +720,122 @@ function init() {
 }
 
 function showAllTracks() {
-  document.getElementById('card-all').style.display = 'block';
-  document.getElementById('nav-track-btn').textContent = 'All Tracks';
+  const card = document.getElementById('card-all');
+  if (card) card.style.display = 'block';
 }
 
 function startTrack(track) {
   currentTrack = track;
-  // update active card
+
+  // update active card highlight
   ['specialist','gp','all'].forEach(t => {
     const el = document.getElementById('card-' + t);
     if (el) el.classList.toggle('active', t === track);
   });
-  // populate category filter
-  const cats = [...new Set(getFiltered('').map(q => q.cat))].sort();
-  const s1 = document.getElementById('cat-filter');
-  const s2 = document.getElementById('browse-cat');
-  s1.innerHTML = '<option value="">All Topics</option>';
-  s2.innerHTML = '<option value="">All Topics</option>';
-  cats.forEach(c => {
-    s1.innerHTML += `<option value="${c}">${c}</option>`;
-    s2.innerHTML += `<option value="${c}">${c}</option>`;
+
+  // populate category dropdowns for this track
+  const pool = QUESTIONS.filter(q => track === 'all' || q.track === track);
+  const cats = [...new Set(pool.map(q => q.cat))].sort();
+  ['cat-filter','browse-cat'].forEach(id => {
+    const sel = document.getElementById(id);
+    if (!sel) return;
+    sel.innerHTML = '<option value="">All Topics</option>';
+    cats.forEach(c => { sel.innerHTML += `<option value="${c}">${c}</option>`; });
   });
-  updateStats();
-  document.getElementById('hero').style.display = 'none';
+
+  // update nav label
+  const labels = {specialist:'Specialist', gp:'GP Licensure', all:'All Tracks'};
+  const btn = document.getElementById('nav-track-btn');
+  if (btn) btn.textContent = labels[track] || 'Tracks';
+
+  // show app, hide hero
+  document.getElementById('hero').style.display     = 'none';
   document.getElementById('main-app').style.display = 'block';
-  const trackLabel = track === 'specialist' ? 'Specialist' : track === 'gp' ? 'GP Licensure' : 'All Tracks';
-  document.getElementById('nav-track-btn').textContent = trackLabel;
+
+  // update stats strip
+  updateStats();
+
+  // go to quiz mode and start
   setMode('quiz');
   startQuiz();
 }
 
 function goHome() {
-  document.getElementById('hero').style.display = 'block';
+  document.getElementById('hero').style.display     = 'block';
   document.getElementById('main-app').style.display = 'none';
-  document.getElementById('nav-track-btn').textContent = 'All Tracks';
+  const btn = document.getElementById('nav-track-btn');
+  if (btn) btn.textContent = 'All Tracks';
 }
 
-function getFiltered(cat) {
-  let qs = QUESTIONS;
-  if (currentTrack !== 'all') qs = qs.filter(q => q.track === currentTrack);
+// ── HELPERS ──
+function getPool(cat) {
+  let qs = (currentTrack === 'all') ? QUESTIONS : QUESTIONS.filter(q => q.track === currentTrack);
   if (cat) qs = qs.filter(q => q.cat === cat);
   return qs;
 }
 
 function updateStats() {
-  const f = getFiltered('');
-  const cats = new Set(f.map(q => q.cat));
-  document.getElementById('stats-strip').innerHTML = `
-    <div class="stat-chip"><strong>${f.length}</strong>Questions</div>
+  const pool = getPool('');
+  const cats = new Set(pool.map(q => q.cat));
+  const specN = QUESTIONS.filter(q => q.track === 'specialist').length;
+  const gpN   = QUESTIONS.filter(q => q.track === 'gp').length;
+  const el = document.getElementById('stats-strip');
+  if (el) el.innerHTML = `
+    <div class="stat-chip"><strong>${pool.length}</strong>Questions</div>
     <div class="stat-chip"><strong>${cats.size}</strong>Topics</div>
-    <div class="stat-chip"><strong>${QUESTIONS.filter(q=>q.track==='specialist').length}</strong>Specialist Qs</div>
-    <div class="stat-chip"><strong>${QUESTIONS.filter(q=>q.track==='gp').length}</strong>GP Qs</div>`;
+    <div class="stat-chip"><strong>${specN}</strong>Specialist Qs</div>
+    <div class="stat-chip"><strong>${gpN}</strong>GP Qs</div>`;
 }
 
 // ── MODE ──
 function setMode(m) {
   currentMode = m;
-  document.querySelectorAll('.mode-btn').forEach((b, i) => b.classList.toggle('active', ['quiz','browse'][i] === m));
-  document.getElementById('quiz-view').style.display   = m === 'quiz' ? 'block' : 'none';
+  document.querySelectorAll('.mode-btn').forEach((b, i) => {
+    b.classList.toggle('active', ['quiz','browse'][i] === m);
+  });
+  document.getElementById('quiz-view').style.display    = m === 'quiz'   ? 'block' : 'none';
   document.getElementById('results-view').style.display = 'none';
-  document.getElementById('browse-view').style.display = m === 'browse' ? 'block' : 'none';
+  document.getElementById('browse-view').style.display  = m === 'browse' ? 'block' : 'none';
   if (m === 'browse') renderBrowse();
 }
 
 // ── QUIZ ──
 function shuffle(arr) {
-  for (let i = arr.length - 1; i > 0; i--) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
+    [a[i], a[j]] = [a[j], a[i]];
   }
-  return arr;
+  return a;
 }
 
 function startQuiz() {
-  const cat = document.getElementById('cat-filter').value;
-  let pool = getFiltered(cat);
-  quizQueue = shuffle([...pool]).slice(0, Math.min(25, pool.length));
-  quizIndex = 0; score = 0; answered = {};
+  const catSel = document.getElementById('cat-filter');
+  const cat = catSel ? catSel.value : '';
+  const pool = getPool(cat);
+  quizQueue  = shuffle(pool).slice(0, Math.min(25, pool.length));
+  quizIndex  = 0;
+  score      = 0;
+  answered   = {};
   document.getElementById('results-view').style.display = 'none';
-  document.getElementById('quiz-view').style.display = 'block';
+  document.getElementById('quiz-view').style.display    = 'block';
   renderQuestion();
 }
 
 function renderQuestion() {
   if (quizIndex >= quizQueue.length) { showResults(); return; }
-  const q = quizQueue[quizIndex], total = quizQueue.length;
-  const pct = Math.round((quizIndex / total) * 100);
-  document.getElementById('prog-fill').style.width = pct + '%';
-  document.getElementById('prog-text').textContent = `Q ${quizIndex + 1} / ${total}`;
-  document.getElementById('score-badge').textContent = `✓ ${score}`;
+
+  const q     = quizQueue[quizIndex];
+  const total = quizQueue.length;
+  const pct   = Math.round((quizIndex / total) * 100);
+
+  document.getElementById('prog-fill').style.width      = pct + '%';
+  document.getElementById('prog-text').textContent      = `Q ${quizIndex + 1} / ${total}`;
+  document.getElementById('score-badge').textContent    = `✓ ${score}`;
+
   const already = answered[q.id];
   const L = ['A','B','C','D','E'];
+
   document.getElementById('question-area').innerHTML = `
     <div class="question-card">
       <div class="q-meta">
@@ -826,8 +850,8 @@ function renderQuestion() {
           let cls = 'option-btn';
           if (already !== undefined) {
             cls += ' disabled';
-            if (i === q.ans) cls += ' correct';
-            else if (i === already && i !== q.ans) cls += ' wrong';
+            if (i === q.ans)                    cls += ' correct';
+            else if (i === already)             cls += ' wrong';
           }
           return `<button class="${cls}" onclick="selectAnswer(${q.id},${i},${q.ans})">
             <span class="option-letter">${L[i]}</span>
@@ -835,12 +859,15 @@ function renderQuestion() {
           </button>`;
         }).join('')}
       </div>
-      <div class="feedback-box ${already !== undefined ? (already === q.ans ? 'correct-fb show' : 'wrong-fb show') : ''}" id="feedback">
-        ${already !== undefined ? `<strong>${already === q.ans ? '✓ Correct!' : '✗ Correct answer: ' + q.opts[q.ans]}</strong><br>${q.exp}` : ''}
+      <div class="feedback-box ${already !== undefined ? (already === q.ans ? 'correct-fb show' : 'wrong-fb show') : ''}">
+        ${already !== undefined
+          ? `<strong>${already === q.ans ? '✓ Correct!' : '✗ Correct: ' + q.opts[q.ans]}</strong><br>${q.exp}`
+          : ''}
       </div>
     </div>`;
+
   document.getElementById('quiz-nav').style.display = 'flex';
-  document.getElementById('next-btn').textContent = quizIndex === quizQueue.length - 1 ? 'Finish Quiz' : 'Next →';
+  document.getElementById('next-btn').textContent   = quizIndex === total - 1 ? 'Finish Quiz' : 'Next →';
 }
 
 function selectAnswer(qid, sel, correct) {
@@ -854,32 +881,35 @@ function nextQuestion() { quizIndex++; renderQuestion(); }
 function prevQuestion() { if (quizIndex > 0) { quizIndex--; renderQuestion(); } }
 
 function showResults() {
-  document.getElementById('quiz-view').style.display = 'none';
-  const rv = document.getElementById('results-view');
-  rv.style.display = 'block';
-  const total = quizQueue.length, pct = Math.round((score / total) * 100);
+  document.getElementById('quiz-view').style.display    = 'none';
+  document.getElementById('results-view').style.display = 'block';
+  const total = quizQueue.length;
+  const pct   = Math.round((score / total) * 100);
   document.getElementById('result-pct').textContent = pct + '%';
-  const ring = document.getElementById('result-ring');
-  ring.style.background = `conic-gradient(#c9963e ${pct}%, #252d3d 0)`;
-  let msg, sub;
-  if (pct >= 80) { msg = '🎉 Excellent Work!'; sub = `${score}/${total} correct — you're well prepared!`; }
-  else if (pct >= 60) { msg = '💪 Good Effort'; sub = `${score}/${total} correct — keep reviewing!`; }
-  else { msg = '📚 Keep Studying'; sub = `${score}/${total} correct — review the explanations below.`; }
+  document.getElementById('result-ring').style.background =
+    `conic-gradient(#c9963e ${pct}%, #252d3d 0)`;
+  const msgs = [
+    [80, '🎉 Excellent Work!',  `${score}/${total} correct — well prepared!`],
+    [60, '💪 Good Effort',      `${score}/${total} correct — keep reviewing!`],
+    [0,  '📚 Keep Studying',    `${score}/${total} correct — review the explanations.`],
+  ];
+  const [, msg, sub] = msgs.find(([min]) => pct >= min);
   document.getElementById('result-msg').textContent = msg;
   document.getElementById('result-sub').textContent = sub;
 }
 
 // ── BROWSE ──
 function renderBrowse() {
-  const search = document.getElementById('search-input').value.toLowerCase();
-  const cat    = document.getElementById('browse-cat').value;
-  let qs = getFiltered(cat);
+  const search  = (document.getElementById('search-input').value || '').toLowerCase();
+  const cat     = document.getElementById('browse-cat').value || '';
+  let qs = getPool(cat);
   if (search) qs = qs.filter(q =>
     q.q.toLowerCase().includes(search) ||
     q.opts.some(o => o.toLowerCase().includes(search)) ||
-    q.exp.toLowerCase().includes(search) ||
+    (q.exp || '').toLowerCase().includes(search) ||
     q.cat.toLowerCase().includes(search)
   );
+
   const area = document.getElementById('browse-area');
   if (!qs.length) {
     area.innerHTML = '<div class="empty"><h3>No questions found</h3><p>Try different filters</p></div>';
@@ -913,6 +943,7 @@ function renderBrowse() {
 function toggleBrowse(id) {
   const a = document.getElementById('ba-' + id);
   const t = document.getElementById('bt-' + id);
+  if (!a || !t) return;
   a.classList.toggle('show');
   t.textContent = a.classList.contains('show') ? '▲' : '▼';
 }
